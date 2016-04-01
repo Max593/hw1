@@ -28,8 +28,9 @@ public class Move<P> {
 
     /** Tipo della mossa, non è mai null */
     public final Kind kind;
-    /** Sequenza di azioni della mossa, non è null solamente se il tipo della mossa
-     * è {@link Kind#ACTION}, la lista è immodificabile e ha lunghezza >= 1 */
+    /** Sequenza di azioni della mossa, non è mai null, la lista non è vuota
+     * solamente se il tipo della mossa è {@link Kind#ACTION}, la lista è
+     * immodificabile */
     public final List<Action<P>> actions;
 
     /** Crea una mossa che non è di tipo {@link Kind#ACTION}.
