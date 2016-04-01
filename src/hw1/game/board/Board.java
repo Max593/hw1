@@ -96,7 +96,7 @@ public interface Board<P> {
      * immodificabile. L'implementazione di default usa {@link Board#positions()} e
      * {@link Board#get(Pos)}.
      * @return l'insieme delle posizioni occupate da pezzi, non ritorna mai null */
-    default Set<Pos> get() { //Errore!! Insieme modificabile!
+    default Set<Pos> get() {
         /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
         Set<Pos> ris = new HashSet<>();
         for(Pos i : positions()){

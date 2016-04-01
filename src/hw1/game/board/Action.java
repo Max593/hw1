@@ -1,6 +1,6 @@
 package hw1.game.board;
 
-import java.util.List;
+import java.util.*;
 
 /** <b>IMPLEMENTARE I METODI SECONDO LE SPECIFICHE DATE NEI JAVADOC. Non modificare
  * le intestazioni dei metodi nè i campi pubblici.</b>
@@ -65,9 +65,16 @@ public class Action<P> {
      * @param pm  modello del pezzo da aggiungere
      * @throws NullPointerException se p o pm è null */
     public Action(Pos p, P pm) {
+        /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
         if(p == null || pm == null) { throw new NullPointerException("La posizione o il modello da aggiungere è null."); }
-        kind = Kind.ADD;
-        throw new UnsupportedOperationException("DA IMPLEMENTARE"); //Se lo levo le variabili public diventano errori!!
+        //Prova!!
+        this.kind = Kind.ADD;
+        this.piece = pm;
+        List<Pos> a = new ArrayList<>();
+        a.add(p);
+        this.pos = a;
+        this.dir = null;
+        this.steps = 0; //Penso che sia da rimuovere!
     }
 
     /** Crea un'azione di tipo {@link Kind#REMOVE} che rimuove i pezzi nelle
@@ -77,7 +84,15 @@ public class Action<P> {
      * @throws IllegalArgumentException se non è data almeno una posizione o sono
      * date posizioni duplicate */
     public Action(Pos...pp) {
-        throw new UnsupportedOperationException("DA IMPLEMENTARE");
+        /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
+        if(pp.length == 0) { throw new IllegalArgumentException("Non è stata inserita nemmeno una posizione"); }
+        Set<Pos> test = new HashSet<Pos>(Arrays.asList(pp)); //Lista senza ripetizioni
+        if(test.size() < pp.length) { throw new IllegalArgumentException("Sono presenti posizioni duplicate");}
+        for(Pos i : pp){
+            if(i == null) { throw new NullPointerException("Una delle posizioni è null"); }
+        }
+        this.kind = Kind.REMOVE;
+        
     }
 
     /** Crea un'azione di tipo {@link Kind#MOVE} che muove tutti i pezzi nelle
