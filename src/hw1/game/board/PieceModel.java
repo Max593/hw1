@@ -24,9 +24,9 @@ public class PieceModel<S extends Enum<S>> {
      * @throws NullPointerException se s o c è null */
     public PieceModel(S s, String c) {
         /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
+        if(s == null || c == null) { throw new NullPointerException("Specie o colore non può essere null"); }
         this.species = s;
         this.color = c;
-        if(s == null || c == null) { throw new NullPointerException("Specie o colore non può essere null"); }
     }
 
     /**

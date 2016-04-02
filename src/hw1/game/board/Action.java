@@ -69,9 +69,9 @@ public class Action<P> {
         if(p == null || pm == null) { throw new NullPointerException("La posizione o il modello da aggiungere è null."); }
         this.kind = Kind.ADD;
         this.piece = pm;
-        this.pos = Arrays.asList(p);
+        this.pos = Collections.singletonList(p); //Lista immutabile di un elemento, molto conveniente
         this.dir = null;
-        this.steps = 0; //Penso che sia da rimuovere!
+        this.steps = 0;
     }
 
     /** Crea un'azione di tipo {@link Kind#REMOVE} che rimuove i pezzi nelle
@@ -174,7 +174,9 @@ public class Action<P> {
     @Override
     public boolean equals(Object x) {
         /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
-        if(x instanceof Action && ((Action) x).getKind() == kind && ((Action) x).getPiece() == piece && ((Action) x).getPos() == pos && ((Action) x).getDir() == dir && ((Action) x).getSteps() == steps) { return true; }
+        if(x instanceof Action && Objects.equals(((Action) x).getKind(),kind) &&
+                Objects.equals(((Action) x).getPiece(),piece) && Objects.equals(((Action) x).getPos(),pos) &&
+                Objects.equals(((Action) x).getDir(),dir) && Objects.equals(((Action) x).getSteps(),steps)) { return true; }
         return false;
     }
 
@@ -182,14 +184,5 @@ public class Action<P> {
      * {@link PieceModel#equals(Object)}.
      * @return hash code di questa azione */
     @Override
-    public int hashCode() {
-        /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
-        //Ordinal di kind + 0 se PM è null o ordinal del PieceModel + hashcode della list pos + ordinal di dir + steps
-
-        String pieceM = String.valueOf(0); // se piece = null
-        if(piece != null) { pieceM = String.valueOf(((PieceModel) piece).species.ordinal()); }
-
-        String code = String.valueOf(kind.ordinal())+pieceM+String.valueOf(pos.hashCode())+String.valueOf(dir.ordinal())+String.valueOf(steps);
-        return Integer.valueOf(code);
-    }
+    public int hashCode() { throw new UnsupportedOperationException("DA IMPLEMENTARE"); }
 }
