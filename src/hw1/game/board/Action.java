@@ -184,5 +184,19 @@ public class Action<P> {
      * {@link PieceModel#equals(Object)}.
      * @return hash code di questa azione */
     @Override
-    public int hashCode() { throw new UnsupportedOperationException("DA IMPLEMENTARE"); }
+    public int hashCode() { //Tentativo
+        /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
+        //Ordinal del kind + ordinal del pezzo + hash del pos + ordinal del dir + steps
+
+        List<String> temp = new ArrayList<>();
+        temp.add(String.valueOf(kind.ordinal())); //vorrei integrarlo nella creazione della lista
+        if(piece != null) { temp.add(String.valueOf( ((PieceModel)piece).species.ordinal() ) ); }
+        temp.add(String.valueOf(pos.hashCode())); //molto poco sicuro di questo, vorrei cambiarlo
+        if(dir != null) { temp.add(String.valueOf(dir.ordinal())); }
+        if(steps != 0) { temp.add(String.valueOf(steps)); }
+        String code = "";
+
+        for(String i : temp) { code += i; }
+        return Integer.valueOf(code);
+    }
 }
