@@ -67,12 +67,9 @@ public class Action<P> {
     public Action(Pos p, P pm) {
         /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
         if(p == null || pm == null) { throw new NullPointerException("La posizione o il modello da aggiungere è null."); }
-        //Prova!!
         this.kind = Kind.ADD;
         this.piece = pm;
-        List<Pos> a = new ArrayList<>();
-        a.add(p);
-        this.pos = a;
+        this.pos = Arrays.asList(p);
         this.dir = null;
         this.steps = 0; //Penso che sia da rimuovere!
     }
@@ -86,12 +83,16 @@ public class Action<P> {
     public Action(Pos...pp) {
         /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
         if(pp.length == 0) { throw new IllegalArgumentException("Non è stata inserita nemmeno una posizione"); }
-        Set<Pos> test = new HashSet<Pos>(Arrays.asList(pp)); //Lista senza ripetizioni
+        Set<Pos> test = new HashSet<>(Arrays.asList(pp)); //Lista senza ripetizioni
         if(test.size() < pp.length) { throw new IllegalArgumentException("Sono presenti posizioni duplicate");}
         for(Pos i : pp){
             if(i == null) { throw new NullPointerException("Una delle posizioni è null"); }
         }
         this.kind = Kind.REMOVE;
+        this.piece = null;
+        this.pos = Arrays.asList(pp);
+        this.dir = null;
+        this.steps = 0;
         
     }
 
@@ -104,7 +105,18 @@ public class Action<P> {
      * @throws IllegalArgumentException se ns < 1 o non è data almeno una posizione
      * o sono date posizioni duplicate */
     public Action(Board.Dir d, int ns, Pos...pp) {
-        throw new UnsupportedOperationException("DA IMPLEMENTARE");
+        /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
+        //Eccezioni varie:
+        if(d == null) { throw new NullPointerException("La direzione è null"); }
+        for(Pos i : pp) { if(i == null) { throw new NullPointerException("Una delle posizioni è null"); } }
+        if(ns < 1 || pp.length == 0) { throw new IllegalArgumentException("Il numero di passi è < 1 o non è stata data almeno una posizione"); }
+        Set<Pos> test = new HashSet<>(Arrays.asList(pp));
+        if(test.size() < pp.length) { throw new IllegalArgumentException("Sono presenti posizioni duplicate"); }
+        this.kind = Kind.MOVE;
+        this.piece = null;
+        this.pos = Arrays.asList(pp);
+        this.dir = d;
+        this.steps = ns;
     }
 
     /** Crea un'azione di tipo {@link Kind#JUMP} che muove il pezzo dalla posizione
@@ -114,7 +126,15 @@ public class Action<P> {
      * @throws NullPointerException se p1 o p2 è null
      * @throws IllegalArgumentException se p1 è uguale a p2 */
     public Action(Pos p1, Pos p2) {
-        throw new UnsupportedOperationException("DA IMPLEMENTARE");
+        /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
+        //Eccezioni varie:
+        if(p1 == null || p2 == null) { throw new NullPointerException("Una delle posizioni è null"); }
+        if(p1.equals(p2)) { throw new IllegalArgumentException("Le posizioni sono uguali"); }
+        this.kind = Kind.JUMP;
+        this.piece = null;
+        this.pos = Arrays.asList(p1, p2);
+        this.dir = null;
+        this.steps = 0;
     }
 
     /** Crea un'azione di tipo {@link Kind#SWAP} che sostituisce tutti i pezzi
@@ -125,8 +145,26 @@ public class Action<P> {
      * @throws IllegalArgumentException se non è data almeno una posizione o sono
      * date posizioni duplicate */
     public Action(P pm, Pos...pp) {
-        throw new UnsupportedOperationException("DA IMPLEMENTARE");
+        /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
+        //Eccezioni varie:
+        if(pm == null) { throw new NullPointerException("Il modello è null"); }
+        for(Pos i : pp) { if(i == null) { throw new NullPointerException("Una delle posizioni è null"); } }
+        if(pp.length == 0) { throw new IllegalArgumentException("Non sono state date posizioni in input"); }
+        Set<Pos> test = new HashSet<>(Arrays.asList(pp));
+        if(test.size() < pp.length) { throw new IllegalArgumentException("Sono presenti posizioni duplicate"); }
+        this.kind = Kind.SWAP;
+        this.piece = pm;
+        this.pos = Arrays.asList(pp);
+        this.dir = null;
+        this.steps = 0;
     }
+
+    public Kind getKind(){ return kind; }
+    public P getPiece() { return piece; }
+    public List<Pos> getPos() { return pos; }
+    public Board.Dir getDir() { return dir; }
+    public int getSteps() { return steps; }
+
 
     /** Ritorna true se e solo se x è un oggetto di tipo {@link Action} ed ha gli
      * stessi valori dei campi {@link Action#kind}, {@link Action#piece},
@@ -135,7 +173,9 @@ public class Action<P> {
      * @return true se x è uguale a questa azione */
     @Override
     public boolean equals(Object x) {
-        throw new UnsupportedOperationException("DA IMPLEMENTARE");
+        /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
+        if(x instanceof Action && ((Action) x).getKind() == kind && ((Action) x).getPiece() == piece && ((Action) x).getPos() == pos && ((Action) x).getDir() == dir && ((Action) x).getSteps() == steps) { return true; }
+        return false;
     }
 
     /** Ridefinito coerentemente con la ridefinizione di
@@ -143,6 +183,13 @@ public class Action<P> {
      * @return hash code di questa azione */
     @Override
     public int hashCode() {
-        throw new UnsupportedOperationException("DA IMPLEMENTARE");
+        /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
+        //Ordinal di kind + 0 se PM è null o ordinal del PieceModel + hashcode della list pos + ordinal di dir + steps
+
+        String pieceM = String.valueOf(0); // se piece = null
+        if(piece != null) { pieceM = String.valueOf(((PieceModel) piece).species.ordinal()); }
+
+        String code = String.valueOf(kind.ordinal())+pieceM+String.valueOf(pos.hashCode())+String.valueOf(dir.ordinal())+String.valueOf(steps);
+        return Integer.valueOf(code);
     }
 }
