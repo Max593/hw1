@@ -1,6 +1,6 @@
 package hw1.game.board;
 
-import java.util.List;
+import java.util.*;
 
 /** <b>IMPLEMENTARE I METODI SECONDO LE SPECIFICHE DATE NEI JAVADOC. Non modificare
  * le intestazioni dei metodi nè i campi pubblici.</b>
@@ -38,7 +38,11 @@ public class Move<P> {
      * @throws NullPointerException se k è null
      * @throws IllegalArgumentException se k è {@link Kind#ACTION} */
     public Move(Kind k) {
-        throw new UnsupportedOperationException("DA IMPLEMENTARE");
+        /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
+        if(k == null) { throw new NullPointerException("Il tipo della mossa non può essere null"); }
+        if(k == Kind.ACTION) { throw new IllegalArgumentException("Il tipo non può essere di tipo ACTION"); }
+        this.kind = k;
+        this.actions = Collections.emptyList(); //Non dovrebbe essere non modificabile?
     }
 
     /** Crea una mossa di tipo {@link Kind#ACTION}.
@@ -47,7 +51,11 @@ public class Move<P> {
      * @throws IllegalArgumentException se non è data almeno un'azione */
     @SafeVarargs
     public Move(Action<P>...aa) {
-        throw new UnsupportedOperationException("DA IMPLEMENTARE");
+        /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
+        if(aa.length == 0) { throw new IllegalArgumentException("Non è stata data nemmeno un azione in input"); }
+        for(Action i : aa) { if(i == null) { throw new NullPointerException("Una delle azioni è null"); } }
+        this.kind = Kind.ACTION;
+        this.actions = Collections.unmodifiableList(Arrays.asList(aa)); //lista immodificabile di azioni
     }
 
     /** Crea una mossa di tipo {@link Kind#ACTION}. La lista aa è solamente letta e
@@ -56,8 +64,18 @@ public class Move<P> {
      * @throws NullPointerException se aa è null o una delle azioni è null
      * @throws IllegalArgumentException se non è data almeno un'azione */
     public Move(List<Action<P>> aa) {
-        throw new UnsupportedOperationException("DA IMPLEMENTARE");
+        /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
+        if(aa.size() == 0) { throw new IllegalArgumentException("Non è stata data nessuna azione in input"); }
+        if(aa == null) { throw new NullPointerException("La lista di azioni non può essere null"); }
+        for(Action i : aa) { if(i == null) { throw new NullPointerException("Una delle azioni è null"); }; }
+        this.kind = Kind.ACTION;
+        List temp = new ArrayList<>(); //Questa cosa non l'ho compresa, approfondire
+        for(Action i : aa) { temp.add(i); }
+        this.actions = Collections.unmodifiableList(temp);
     }
+
+    public Kind getKind() { return kind; }
+    public List getActions() { return actions; }
 
     /** Ritorna true se e solo se x è un oggetto di tipo {@link Move} ed ha gli
      * stessi valori dei campi {@link Move#kind} e {@link Move#actions}.
@@ -65,7 +83,10 @@ public class Move<P> {
      * @return true se x è uguale a questa mossa */
     @Override
     public boolean equals(Object x) {
-        throw new UnsupportedOperationException("DA IMPLEMENTARE");
+        /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
+        if(x instanceof Move && Objects.equals(((Move) x).getKind(),kind) &&
+                Objects.equals(((Move) x).getActions(),actions)) { return true; }
+        return false;
     }
 
     /** Ridefinito coerentemente con la ridefinizione di
@@ -73,6 +94,10 @@ public class Move<P> {
      * @return hash code di questa mossa */
     @Override
     public int hashCode() {
-        throw new UnsupportedOperationException("DA IMPLEMENTARE");
+        /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
+        String i = "";
+        if(actions.size() > 0) { i = String.valueOf(actions.hashCode()); } //se actions ha effettivamente qualcosa dentro
+        String code = String.valueOf(kind.ordinal())+i;
+        return Integer.valueOf(code);
     }
 }
