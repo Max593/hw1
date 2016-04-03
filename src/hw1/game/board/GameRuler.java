@@ -110,7 +110,11 @@ public interface GameRuler<P> {
      * @throws NullPointerException se m è null
      * @throws IllegalStateException se il gioco è terminato */
     default boolean isValid(Move<P> m) {
-        throw new UnsupportedOperationException("DA IMPLEMENTARE");
+        /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
+        if(m == null) { throw new NullPointerException("La mossa non può essere null"); }
+        if(result() > 0) { throw new IllegalStateException("Il gioco è terminato"); }
+        for(Move i : validMoves()) { if(m.equals(i)) { return true; } }
+        return false;
     }
 
     /** Ritorna l'insieme delle mosse valide relative alla posizione p. Se nella
@@ -129,7 +133,13 @@ public interface GameRuler<P> {
      * @throws IllegalArgumentException se p non è una posizione della board
      * @throws IllegalStateException se il gioco è terminato */
     default Set<Move<P>> validMoves(Pos p) {
-        throw new UnsupportedOperationException("DA IMPLEMENTARE");
+        /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
+        if(p == null) { throw new NullPointerException("La posizione non può essere null"); }
+        if(!getBoard().isPos(p)) { throw new IllegalArgumentException("Il pezzo non si trova nella Board"); }
+        if(result() > 0) { throw new IllegalStateException("Il gioco è ormai terminato"); }
+        if(getBoard().get(p) != null) { //Se la posizione della board contiene un pezzo
+            
+        }
     }
 
     /** Ritorna il punteggio attuale del giocatore con indice di turnazione i.

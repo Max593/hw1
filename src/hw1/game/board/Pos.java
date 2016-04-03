@@ -19,9 +19,9 @@ public class Pos {
      * @throws IllegalArgumentException se una delle coordinate è nagativa */
     public Pos(int b, int t) {
         /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
+        if(b<0 || t<0) { throw new IllegalArgumentException("Una delle coordinate è negativa"); }
         this.b = b;
         this.t = t;
-        if(b<0 || t<0) { throw new IllegalArgumentException("Una delle coordinate è negativa"); }
     }
 
     /**
