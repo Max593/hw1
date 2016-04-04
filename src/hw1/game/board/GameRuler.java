@@ -115,7 +115,8 @@ public interface GameRuler<P> {
         /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
         if(m == null) { throw new NullPointerException("La mossa non può essere null"); }
         if(turn() == 0) { throw new IllegalStateException("Il gioco è terminato"); }
-        for(Move i : validMoves()) { if(m.equals(i)) { return true; } }
+        if(validMoves().contains(m)) { return true; }
+        //for(Move i : validMoves()) { if(m.equals(i)) { return true; } } //lento
         return false;
     }
 
@@ -139,14 +140,15 @@ public interface GameRuler<P> {
         if(p == null) { throw new NullPointerException("La posizione non può essere null"); }
         if(!getBoard().isPos(p)) { throw new IllegalArgumentException("Il pezzo non si trova nella Board"); }
         if(turn() == 0) { throw new IllegalStateException("Il gioco è ormai terminato"); }
-        Set<Move<P>> ris = new HashSet<>();
+        Set<Move<P>> ris = new HashSet<>(); //Insieme del risultato
 
         if(getBoard().get(p) != null) { //Se la posizione della board contiene un pezzo
             for(Move i : validMoves()) {
                 if(i.getKind().equals(Move.Kind.ACTION)) { //Solo se la mossa è di tipo Action
                     Action a = ((Action) i.getActions().get(0));
-                    if(a.getKind().equals(Action.Kind.MOVE) || a.getKind().equals(Action.Kind.JUMP) ||
-                            a.getKind().equals(Action.Kind.SWAP)) { ris.add(i); }
+                    if((a.getKind().equals(Action.Kind.MOVE) || a.getKind().equals(Action.Kind.JUMP) ||
+                            a.getKind().equals(Action.Kind.SWAP)) && a.getPiece().equals(getBoard().get(p)))
+                    { ris.add(i); }
                 }
             }
         }
@@ -154,7 +156,9 @@ public interface GameRuler<P> {
             for(Move i : validMoves()) {
                 if(i.getKind().equals(Move.Kind.ACTION)) { //Solo se la mossa è di tipo Action
                     Action a = ((Action) i.getActions().get(0));
-                    if(a.getKind().equals(Action.Kind.ADD)) { ris.add(i); }
+                    if(a.getKind().equals(Action.Kind.ADD) &&
+                            a.getPos().equals(Collections.singletonList(p)))
+                    { ris.add(i); }
                 }
             }
         }

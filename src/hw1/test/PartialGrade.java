@@ -40,7 +40,7 @@ public class PartialGrade {
         if (ok) ok = test_BoardDef(4f, 500);
         if (ok) ok = test_Action(5f, 500);
         if (ok) ok = test_Move(3f, 500);
-        if (ok) ok = test_GameRulerDef(4f, 22500); //500
+        if (ok) ok = test_GameRulerDef(4f, 22500); //500 RIPORTARE A SITUAZIONE ORIGINALE!!!
         if (ok) ok = test_BoardOct(5f, 1000);
         if (ok) ok = test_UnmodifiableBoard(3f, 500);
         if (ok) ok = test_PlayRandPlayer(4f, 1000);
