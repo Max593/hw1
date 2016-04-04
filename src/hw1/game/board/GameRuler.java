@@ -1,5 +1,7 @@
 package hw1.game.board;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -112,7 +114,7 @@ public interface GameRuler<P> {
     default boolean isValid(Move<P> m) {
         /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
         if(m == null) { throw new NullPointerException("La mossa non può essere null"); }
-        if(result() > 0) { throw new IllegalStateException("Il gioco è terminato"); }
+        if(turn() == 0) { throw new IllegalStateException("Il gioco è terminato"); }
         for(Move i : validMoves()) { if(m.equals(i)) { return true; } }
         return false;
     }
@@ -136,10 +138,27 @@ public interface GameRuler<P> {
         /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
         if(p == null) { throw new NullPointerException("La posizione non può essere null"); }
         if(!getBoard().isPos(p)) { throw new IllegalArgumentException("Il pezzo non si trova nella Board"); }
-        if(result() > 0) { throw new IllegalStateException("Il gioco è ormai terminato"); }
+        if(turn() == 0) { throw new IllegalStateException("Il gioco è ormai terminato"); }
+        Set<Move<P>> ris = new HashSet<>();
+
         if(getBoard().get(p) != null) { //Se la posizione della board contiene un pezzo
-            
+            for(Move i : validMoves()) {
+                if(i.getKind().equals(Move.Kind.ACTION)) { //Solo se la mossa è di tipo Action
+                    Action a = ((Action) i.getActions().get(0));
+                    if(a.getKind().equals(Action.Kind.MOVE) || a.getKind().equals(Action.Kind.JUMP) ||
+                            a.getKind().equals(Action.Kind.SWAP)) { ris.add(i); }
+                }
+            }
         }
+        if(getBoard().get(p) == null) { //Se la posizione della board NON contiene un pezzo
+            for(Move i : validMoves()) {
+                if(i.getKind().equals(Move.Kind.ACTION)) { //Solo se la mossa è di tipo Action
+                    Action a = ((Action) i.getActions().get(0));
+                    if(a.getKind().equals(Action.Kind.ADD)) { ris.add(i); }
+                }
+            }
+        }
+        return Collections.unmodifiableSet(ris);
     }
 
     /** Ritorna il punteggio attuale del giocatore con indice di turnazione i.
@@ -150,9 +169,7 @@ public interface GameRuler<P> {
      * @throws IllegalArgumentException se i non è l'indice di turnazione di alcun
      * giocatore
      * @throws UnsupportedOperationException se questo gioco non prevede punteggi */
-    default double score(int i) {
-        throw new UnsupportedOperationException("Questo gioco non ha punteggi");
-    }
+    default double score(int i) { throw new UnsupportedOperationException("Questo gioco non ha punteggi"); }
 
     /** Ritorna una copia profonda (una deep copy) di questo GameRuler. Questo
      * significa che tutti i valori mutabili dei campi del GameRuler devono essere
