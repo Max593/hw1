@@ -81,8 +81,8 @@ public interface Board<P> {
     default boolean isPos(Pos p) {
         /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
         if(p == null) { throw new NullPointerException("La posizione è null"); }
-        if(p.getB() >= width() || p.getT() >= height()) { return false; }
-        return true;
+        if(positions().contains(p)) { return true; }
+        return false;
     }
 
     /** Ritorna il (modello di) pezzo nella posizione p della board o null se la
@@ -169,11 +169,10 @@ public interface Board<P> {
      * specificata non è nella board */
     default void put(P pm, Pos p, Dir d, int n) {
         /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
-        //Eccezioni varie:
         if(!isModifiable()) { throw new UnsupportedOperationException("Questa board è immodificabile"); }
         if(pm == null || p == null || d == null) { throw new NullPointerException("La pedina, la posizione o la direzione è null"); }
-        Pos orig = p; //Posizione di origine.
         if(n <= 0) { throw new IllegalArgumentException("Il numero di posizioni da percorrere è <= 0"); }
+        Pos orig = p; //Posizione di origine.
         for(int i = 0; i < n; i++) {
             orig = adjacent(orig, d);
             if(orig == null) { throw new IllegalArgumentException("La posizione non è nella Board"); }
