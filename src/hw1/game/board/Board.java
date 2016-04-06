@@ -172,11 +172,11 @@ public interface Board<P> {
         if(!isModifiable()) { throw new UnsupportedOperationException("Questa board è immodificabile"); }
         if(pm == null || p == null || d == null) { throw new NullPointerException("La pedina, la posizione o la direzione è null"); }
         if(n <= 0) { throw new IllegalArgumentException("Il numero di posizioni da percorrere è <= 0"); }
-        Pos orig = p; //Posizione di origine.
+        Pos temp = p; //Posizione di origine.
         for(int i = 0; i < n; i++) {
-            orig = adjacent(orig, d);
-            if(orig == null) { throw new IllegalArgumentException("La posizione non è nella Board"); }
+            temp = adjacent(temp, d);
+            if(temp == null) { throw new IllegalArgumentException("La posizione non è nella Board"); }
         }
-        put(pm, orig);
+        put(pm, temp);
     }
 }
