@@ -1,5 +1,7 @@
 package hw1.game.board;
 
+import java.util.Objects;
+
 /** <b>IMPLEMENTARE I METODI SECONDO LE SPECIFICHE DATE NEI JAVADOC. Non modificare
  * le intestazioni dei metodi nè i campi pubblici.</b>
  * <br>
@@ -52,11 +54,8 @@ public class PieceModel<S extends Enum<S>> {
      * {@link PieceModel#equals(Object)}.
      * @return hash code di questo modello di pezzo */
     @Override
-    public int hashCode() { //Tentativo di risoluzione!! ordinal del pezzo + 1 o 0 per white e black
+    public int hashCode() {
         /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
-        int col = 0;
-        if(color == "white") {col = 1;}
-        String c = String.valueOf(species.ordinal())+String.valueOf(col);
-        return Integer.valueOf(c);
+        return Objects.hash(species, color);
     }
 }

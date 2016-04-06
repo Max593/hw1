@@ -47,7 +47,6 @@ public class Pos {
     @Override
     public int hashCode() { //Tentativo di risoluzione!! compongo le coordinate e le uso come hascode
         /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
-        String c = String.valueOf(b)+String.valueOf(t);
-        return Integer.valueOf(c);
+        return Objects.hash(b, t);
     }
 }

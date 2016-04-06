@@ -2,6 +2,9 @@ package hw1.game.util;
 
 import hw1.game.GameFactory;
 import hw1.game.board.*;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Function;
 
 /** <b>IMPLEMENTARE I METODI INDICATI CON "DA IMPLEMENTARE" SECONDO LE SPECIFICHE
@@ -39,7 +42,15 @@ public class Utils {
      * compatibile con quello richiesto dalla GameFactory gf */
     @SafeVarargs
     public static <P> GameRuler<P> play(GameFactory<? extends GameRuler<P>> gf, Player<P>...pp) {
-        throw new UnsupportedOperationException("DA IMPLEMENTARE");
+        /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
+        if(gf == null || pp == null) { throw new NullPointerException("La GameFactory o la lista dei giocatori è null"); }
+
+        List<String> nomi = new ArrayList<>();
+        for(Player i : pp) { nomi.add(i.name()); }
+        gf.setPlayerNames((String[]) nomi.toArray()); //Imposto i nomi dei giocatori
+        GameRuler<P> gR = gf.newGame();
+        for(Player i : pp) { i.setGame(gR); }
+        return gR;
     }
 
     /** Ritorna un oggetto funzione che per ogni oggetto di tipo {@link PieceModel}

@@ -95,9 +95,6 @@ public class Move<P> {
     @Override
     public int hashCode() {
         /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
-        String i = "";
-        if(actions.size() > 0) { i = String.valueOf(actions.hashCode()); } //se actions ha effettivamente qualcosa dentro
-        String code = String.valueOf(kind.ordinal())+i;
-        return Integer.valueOf(code);
+        return Objects.hash(kind, actions);
     }
 }
