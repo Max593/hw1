@@ -1,11 +1,7 @@
 package hw1.game.util;
 
 import hw1.game.GameFactory;
-import hw1.game.board.Board;
-import hw1.game.board.GameRuler;
-import hw1.game.board.PieceModel;
-import hw1.game.board.Player;
-
+import hw1.game.board.*;
 import java.util.function.Function;
 
 /** <b>IMPLEMENTARE I METODI INDICATI CON "DA IMPLEMENTARE" SECONDO LE SPECIFICHE
@@ -23,7 +19,10 @@ public class Utils {
      * @return una view immodificabile della board b
      * @throws NullPointerException se b è null */
     public static <P> Board<P> UnmodifiableBoard(Board<P> b) {
-        throw new UnsupportedOperationException("DA IMPLEMENTARE");
+        /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
+        if(b == null) { throw new NullPointerException("La Board di input non può essere null"); }
+
+        return new BoardView<>(b);
     }
 
     /** Imposta i nomi dei giocatori pp nella GameFactory gf poi ottiene il

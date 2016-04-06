@@ -1,7 +1,6 @@
 package hw1.game.util;
 
 import hw1.game.board.Board;
-import hw1.game.board.PieceModel;
 import hw1.game.board.Pos;
 
 import java.util.*;
