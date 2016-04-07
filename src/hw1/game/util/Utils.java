@@ -4,6 +4,8 @@ import hw1.game.GameFactory;
 import hw1.game.board.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 
@@ -45,12 +47,18 @@ public class Utils {
         /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
         if(gf == null || pp == null) { throw new NullPointerException("La GameFactory o la lista dei giocatori è null"); }
 
-        List<String> nomi = new ArrayList<>();
-        for(Player i : pp) { nomi.add(i.name()); }
-        gf.setPlayerNames((String[]) nomi.toArray()); //Imposto i nomi dei giocatori
-        GameRuler<P> gR = gf.newGame();
+        String[] names = new String[0];
+        for(Player i : pp) {
+            names = Arrays.copyOf(names, names.length+1);
+            names[names.length-1] = i.name(); }
+        gf.setPlayerNames(names);
+
+        GameRuler<P> gR = gf.newGame().copy();
         for(Player i : pp) { i.setGame(gR); }
-        return gR;
+
+        while(gR.result() == -1) {
+
+        }
     }
 
     /** Ritorna un oggetto funzione che per ogni oggetto di tipo {@link PieceModel}

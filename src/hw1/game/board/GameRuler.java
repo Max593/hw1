@@ -116,7 +116,6 @@ public interface GameRuler<P> {
         if(m == null) { throw new NullPointerException("La mossa non può essere null"); }
         if(turn() == 0) { throw new IllegalStateException("Il gioco è terminato"); }
         if(validMoves().contains(m)) { return true; }
-        //for(Move i : validMoves()) { if(m.equals(i)) { return true; } } //lento
         return false;
     }
 
