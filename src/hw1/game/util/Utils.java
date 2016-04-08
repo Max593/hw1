@@ -55,10 +55,8 @@ public class Utils {
 
         GameRuler<P> gR = gf.newGame().copy();
         for(Player i : pp) { i.setGame(gR); }
-
-        while(gR.result() == -1) {
-
-        }
+        while(gR.result() == -1) { gR.move(pp[gR.turn()-1].getMove()); } //Esegue il gioco
+        return gR;
     }
 
     /** Ritorna un oggetto funzione che per ogni oggetto di tipo {@link PieceModel}

@@ -14,7 +14,6 @@ import hw1.game.board.Player;
 public class RandPlayer<P> implements Player<P> {
     public String name;
     public GameRuler<P> gameRul;
-    public Move<P> mov; //Mossa che deve fare il player
 
     /** Crea un giocatore random, capace di giocare a un qualsiasi gioco, che ad
      * ogni suo turno fa una mossa scelta in modo random tra quelle valide.
@@ -25,7 +24,6 @@ public class RandPlayer<P> implements Player<P> {
         if(name == null) { throw new NullPointerException("Il nome del player non può essere null"); }
         this.name = name;
         this.gameRul = null;
-        this.mov = null;
     }
 
     @Override
@@ -44,14 +42,21 @@ public class RandPlayer<P> implements Player<P> {
         if(i < 1 || i > gameRul.players().size()
                 || !gameRul.isValid(m)) { throw new IllegalArgumentException("Indice di turnazione non consentito o mossa non valida"); }
         gameRul.move(m);
-        if(i == gameRul.turn()) { mov = m; } //Se è il turno del giocatore salva la mossa
     }
 
     @Override
     public Move<P> getMove() {
         /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
-        if(gameRul == null || gameRul.result() >= 0 || gameRul.players().indexOf(name)+1 != gameRul.turn()) {
-            throw new IllegalStateException("Il non può essere null, terminato o non è il turno di questo giocatore"); }
+        if(gameRul == null || gameRul.result() >= 0 ||
+                gameRul.players().indexOf(name)+1 != gameRul.turn()) { throw new IllegalStateException("Il gioco potrebbe non essere impostato, terminato o non è il turno del giocatore"); }
+
+        Move mov = null;
+        for(Move i : gameRul.validMoves()) {
+            if(gameRul.isValid(i)) {
+                mov = i;
+                break;
+            }
+        }
         return mov;
     }
 }
