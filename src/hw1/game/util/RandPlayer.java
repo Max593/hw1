@@ -4,6 +4,11 @@ import hw1.game.board.GameRuler;
 import hw1.game.board.Move;
 import hw1.game.board.Player;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+
 /** <b>IMPLEMENTARE I METODI SECONDO LE SPECIFICHE DATE NEI JAVADOC. Non modificare
  * le intestazioni dei metodi.</b>
  * <br>
@@ -50,13 +55,9 @@ public class RandPlayer<P> implements Player<P> {
         if(gameRul == null || gameRul.result() >= 0 ||
                 gameRul.players().indexOf(name)+1 != gameRul.turn()) { throw new IllegalStateException("Il gioco potrebbe non essere impostato, terminato o non è il turno del giocatore"); }
 
-        Move mov = null;
-        for(Move i : gameRul.validMoves()) {
-            if(gameRul.isValid(i)) {
-                mov = i;
-                break;
-            }
-        }
-        return mov;
+        List temp = new ArrayList<>();
+        temp.addAll(gameRul.validMoves());
+        Random rand = new Random();
+        return (Move) temp.get(rand.nextInt(temp.size()));
     }
 }

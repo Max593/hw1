@@ -1,10 +1,11 @@
 package hw1.games;
 
-import hw1.game.board.Board;
-import hw1.game.board.GameRuler;
-import hw1.game.board.Move;
-import hw1.game.board.PieceModel;
+import hw1.game.board.*;
+import hw1.game.util.BoardOct;
+import hw1.game.util.RandPlayer;
+import hw1.game.util.Utils;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -47,12 +48,24 @@ import static hw1.game.board.PieceModel.Species;
  * può consultare
  * <a href="https://it.wikipedia.org/wiki/Othello_(gioco)">Othello</a> */
 public class Othello implements GameRuler<PieceModel<Species>> {
+    public final Player player1;
+    public final Player player2;
+    public final Board<PieceModel<Species>> board;
+
     /** Crea un GameRuler per fare una partita a Othello.
      * @param p1  il nome del primo giocatore
      * @param p2  il nome del secondo giocatore
      * @throws NullPointerException se p1 o p2 è null */
     public Othello(String p1, String p2) {
-        throw new UnsupportedOperationException("DA IMPLEMENTARE");
+        /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
+        this.board = new BoardOct(8, 8);
+        board.put(new PieceModel(Species.DISC, "bianco"), new Pos(4, 4));
+        board.put(new PieceModel(Species.DISC, "nero"), new Pos(5, 4));
+        board.put(new PieceModel(Species.DISC, "bianco"), new Pos(4, 5));
+        board.put(new PieceModel(Species.DISC, "nero"), new Pos(5, 5));
+        this.player1 = new RandPlayer<>(p1); //
+        this.player2 = new RandPlayer<>(p2);
+        for(Player i : Arrays.asList(player1, player2)) { i.setGame(copy()); } //Copia il gameruler ai giocatori
     }
 
     @Override
@@ -67,31 +80,38 @@ public class Othello implements GameRuler<PieceModel<Species>> {
 
     @Override
     public List<String> players() {
-        throw new UnsupportedOperationException("DA IMPLEMENTARE");
+        return Arrays.asList(player1.name(), player2.name());
     }
 
     /** Assegna il colore "nero" al primo giocatore e "bianco" al secondo. */
     @Override
     public String color(String name) {
-        throw new UnsupportedOperationException("DA IMPLEMENTARE");
+        if(name == null) { throw new NullPointerException("Il nome del player non può essere null"); }
+        if(!players().contains(name)) { throw new IllegalArgumentException("Il player non è presente nel gioco"); }
+        if(players().indexOf(name) == 0) { return "nero"; }
+        return "bianco";
     }
 
     @Override
-    public Board getBoard() {
-        throw new UnsupportedOperationException("DA IMPLEMENTARE");
-    }
+    public Board getBoard() { return Utils.UnmodifiableBoard(board); }
 
     /** Se il giocatore di turno non ha nessuna mossa valida il turno è
      * automaticamente passato all'altro giocatore. Ma se anche l'altro giocatore
      * non ha mosse valide, la partita termina. */
     @Override
     public int turn() {
-        throw new UnsupportedOperationException("DA IMPLEMENTARE");
+        /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
+        if(player1.getMove() == null && player2.getMove() == null) { return 0; }
+        if(isPlaying(0) && validMoves().size() == 0) { return 2; }
+        return 1;
     }
 
     @Override
     public boolean move(Move<PieceModel<Species>> m) {
-        throw new UnsupportedOperationException("DA IMPLEMENTARE");
+        /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
+        if(m == null) { throw new NullPointerException("La mossa non può essere null"); }
+        if(result() > -1) { throw new IllegalStateException("Il gioco è già terminato"); }
+        throw new IllegalArgumentException("da finire");
     }
 
     @Override

@@ -3,10 +3,7 @@ package hw1.game.util;
 import hw1.game.GameFactory;
 import hw1.game.board.*;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 import java.util.function.Function;
 
 /** <b>IMPLEMENTARE I METODI INDICATI CON "DA IMPLEMENTARE" SECONDO LE SPECIFICHE
