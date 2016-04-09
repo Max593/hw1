@@ -112,7 +112,7 @@ public class BoardOct<P> implements Board<P> {
     @Override
     public List<Pos> positions() {
         List<Pos> temp = new ArrayList<>(positions.keySet());
-        return temp;
+        return Collections.unmodifiableList(temp);
     }
 
     @Override

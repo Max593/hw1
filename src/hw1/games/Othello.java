@@ -5,10 +5,7 @@ import hw1.game.util.BoardOct;
 import hw1.game.util.RandPlayer;
 import hw1.game.util.Utils;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 import static hw1.game.board.PieceModel.Species;
 
@@ -50,7 +47,8 @@ import static hw1.game.board.PieceModel.Species;
 public class Othello implements GameRuler<PieceModel<Species>> {
     public final Player player1;
     public final Player player2;
-    public final Board<PieceModel<Species>> board;
+    public Board<PieceModel<Species>> board;
+    public int cT;
 
     /** Crea un GameRuler per fare una partita a Othello.
      * @param p1  il nome del primo giocatore
@@ -61,11 +59,12 @@ public class Othello implements GameRuler<PieceModel<Species>> {
         this.board = new BoardOct(8, 8);
         board.put(new PieceModel(Species.DISC, "bianco"), new Pos(4, 4));
         board.put(new PieceModel(Species.DISC, "nero"), new Pos(5, 4));
-        board.put(new PieceModel(Species.DISC, "bianco"), new Pos(4, 5));
-        board.put(new PieceModel(Species.DISC, "nero"), new Pos(5, 5));
+        board.put(new PieceModel(Species.DISC, "nero"), new Pos(4, 5));
+        board.put(new PieceModel(Species.DISC, "bianco"), new Pos(5, 5));
         this.player1 = new RandPlayer<>(p1); //
         this.player2 = new RandPlayer<>(p2);
         for(Player i : Arrays.asList(player1, player2)) { i.setGame(copy()); } //Copia il gameruler ai giocatori
+        this.cT = 1; //Inizia il player1
     }
 
     @Override
@@ -101,9 +100,10 @@ public class Othello implements GameRuler<PieceModel<Species>> {
     @Override
     public int turn() {
         /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
-        if(player1.getMove() == null && player2.getMove() == null) { return 0; }
-        if(isPlaying(0) && validMoves().size() == 0) { return 2; }
-        return 1;
+        if(cT == 1 && validMoves().size() == 0) { cT = 2; }
+        if(cT == 2 && validMoves().size() == 0) { cT = 1; }
+        if(player1.getMove() == null && player2.getMove() == null) { cT = 0; }
+        return cT;
     }
 
     @Override
@@ -111,8 +111,20 @@ public class Othello implements GameRuler<PieceModel<Species>> {
         /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
         if(m == null) { throw new NullPointerException("La mossa non può essere null"); }
         if(result() > -1) { throw new IllegalStateException("Il gioco è già terminato"); }
-        throw new IllegalArgumentException("da finire");
-    }
+        if(m.getKind() == Move.Kind.ACTION) {
+            String c = "bianco";
+            if(cT == 1) { c = "nero"; }
+            for(Object i : m.getActions()) { //Le varie azioni
+                if(((Action) i).getKind() == Action.Kind.ADD) {
+                    board.put(new PieceModel<Species>(Species.DISC,c), (Pos) ((Action) i).getPos().get(0));
+                }
+                if(((Action) i).getKind() == Action.Kind.SWAP) {
+                    for(Object p : ((Action) i).getPos()) {
+                        board.put(new PieceModel<Species>(Species.DISC,c), (Pos) ((Action) i).getPos().get(0));
+                    } } }
+            if(cT == 1) { cT = 2; }
+            cT = 1; return true; }
+        return false; }
 
     @Override
     public boolean unMove() {
