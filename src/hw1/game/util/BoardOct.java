@@ -26,7 +26,6 @@ public class BoardOct<P> implements Board<P> {
      * @param height  altezza board
      * @throws IllegalArgumentException se width <= 0 o height <= 0 */
     public BoardOct(int width, int height) {
-        /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
         if(width <= 0 || height <= 0) { throw new IllegalArgumentException("La larghezza o l'altezza non possono essere <= 0"); }
 
         this.system = System.OCTAGONAL;
@@ -34,11 +33,8 @@ public class BoardOct<P> implements Board<P> {
         this.height = height;
 
         Map<Pos, P> temp = new HashMap<>();
-        for(int i = 0; i < width; i++) {
-            for(int h = 0; h < height; h++) {
-                temp.put(new Pos(i, h), null); } } //Crea la posizione sulla scacchiera e non pone nessun pezzo
-        this.positions = temp;
-    }
+        for(int i = 0; i < width; i++) { for(int h = 0; h < height; h++) { temp.put(new Pos(i, h), null); } } //Crea la posizione sulla scacchiera e non pone nessun pezzo
+        this.positions = temp; }
 
     /** Crea una BoardOct con le dimensioni date (può quindi essere rettangolare)
      * escludendo le posizioni in exc. Le adiacenze sono tutte e otto, eccetto per
@@ -51,7 +47,6 @@ public class BoardOct<P> implements Board<P> {
      * @throws NullPointerException se exc è null
      * @throws IllegalArgumentException se width <= 0 o height <= 0 */
     public BoardOct(int width, int height, Collection<? extends Pos> exc) {
-        /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
         if(exc == null) { throw new NullPointerException("L'insieme delle posizioni escluse non può essere null"); }
         if(width <= 0 || height <= 0) { throw new IllegalArgumentException("La larghezza o l'altezza non possono essere <= 0"); }
 
@@ -63,8 +58,7 @@ public class BoardOct<P> implements Board<P> {
         for(int i = 0; i < width; i++) {
             for(int h = 0; h < height; h++) {
                 if(!exc.contains(new Pos(i, h))) { temp.put(new Pos(i, h), null); } } }
-        this.positions = temp;
-    }
+        this.positions = temp; }
 
     @Override
     public System system() { return system; }
@@ -105,23 +99,17 @@ public class BoardOct<P> implements Board<P> {
                 Pos tp = new Pos(p.getB()+1, p.getT()-1);
                 if(positions.containsKey(tp)) { return tp; } }
         }
-
-        return null;
-    }
+        return null; }
 
     @Override
     public List<Pos> positions() {
         List<Pos> temp = new ArrayList<>(positions.keySet());
-        return Collections.unmodifiableList(temp);
-    }
+        return Collections.unmodifiableList(temp); }
 
     @Override
     public P get(Pos p) {
         if(p == null) { throw new NullPointerException("La posizione non può essere null"); }
-
-        if(positions.containsKey(p)) { return positions.get(p); }
-        return null;
-    }
+        if(positions.containsKey(p)) { return positions.get(p); } return null; }
 
     @Override
     public boolean isModifiable() { return true; }
@@ -131,19 +119,16 @@ public class BoardOct<P> implements Board<P> {
         if(!isModifiable()) { throw new UnsupportedOperationException("Questa Board è immodificabile"); }
         if(pm == null || p == null) { throw new NullPointerException("La posizione o il pezzo sono null"); }
         if(!positions.containsKey(p)) { throw new IllegalArgumentException("La posizione non è parte della board");}
-
         positions.put(p, pm);
-        return pm;
-    }
+        return pm; }
 
     @Override
     public P remove(Pos p) {
         if(!isModifiable()) { throw new UnsupportedOperationException("Questa Board è immodificabile"); }
         if(p == null) { throw new NullPointerException("La posizione non può essere null"); }
         if(!positions.containsKey(p)) { throw new IllegalArgumentException("La posizione non è parte della board"); }
-
         P old = positions.get(p);
         positions.put(p, null);
-        return old;
-    }
+        return old; }
+
 }

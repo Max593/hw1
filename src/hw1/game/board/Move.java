@@ -38,11 +38,10 @@ public class Move<P> {
      * @throws NullPointerException se k è null
      * @throws IllegalArgumentException se k è {@link Kind#ACTION} */
     public Move(Kind k) {
-        /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
         if(k == null) { throw new NullPointerException("Il tipo della mossa non può essere null"); }
         if(k == Kind.ACTION) { throw new IllegalArgumentException("Il tipo non può essere di tipo ACTION"); }
         this.kind = k;
-        this.actions = Collections.emptyList(); //Non dovrebbe essere non modificabile?
+        this.actions = Collections.emptyList();
     }
 
     /** Crea una mossa di tipo {@link Kind#ACTION}.
@@ -51,7 +50,6 @@ public class Move<P> {
      * @throws IllegalArgumentException se non è data almeno un'azione */
     @SafeVarargs
     public Move(Action<P>...aa) {
-        /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
         if(aa.length == 0) { throw new IllegalArgumentException("Non è stata data nemmeno un azione in input"); }
         for(Action i : aa) { if(i == null) { throw new NullPointerException("Una delle azioni è null"); } }
         this.kind = Kind.ACTION;
@@ -64,12 +62,11 @@ public class Move<P> {
      * @throws NullPointerException se aa è null o una delle azioni è null
      * @throws IllegalArgumentException se non è data almeno un'azione */
     public Move(List<Action<P>> aa) {
-        /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
         if(aa.size() == 0) { throw new IllegalArgumentException("Non è stata data nessuna azione in input"); }
         if(aa == null) { throw new NullPointerException("La lista di azioni non può essere null"); }
-        for(Action i : aa) { if(i == null) { throw new NullPointerException("Una delle azioni è null"); }; }
+        for(Action i : aa) { if(i == null) { throw new NullPointerException("Una delle azioni è null"); } }
         this.kind = Kind.ACTION;
-        List temp = new ArrayList<>(); //Questa cosa non l'ho compresa, approfondire
+        List temp = new ArrayList<>();
         for(Action i : aa) { temp.add(i); }
         this.actions = Collections.unmodifiableList(temp);
     }
@@ -83,18 +80,13 @@ public class Move<P> {
      * @return true se x è uguale a questa mossa */
     @Override
     public boolean equals(Object x) {
-        /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
         if(x instanceof Move && Objects.equals(((Move) x).getKind(),kind) &&
-                Objects.equals(((Move) x).getActions(),actions)) { return true; }
-        return false;
-    }
+                Objects.equals(((Move) x).getActions(),actions)) { return true; } return false; }
 
     /** Ridefinito coerentemente con la ridefinizione di
      * {@link PieceModel#equals(Object)}.
      * @return hash code di questa mossa */
     @Override
-    public int hashCode() {
-        /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
-        return Objects.hash(kind, actions);
-    }
+    public int hashCode() { return Objects.hash(kind, actions); }
+
 }

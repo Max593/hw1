@@ -18,18 +18,15 @@ public class Pos {
      * @param t  coordinata asse trasversale (non negativa)
      * @throws IllegalArgumentException se una delle coordinate è nagativa */
     public Pos(int b, int t) {
-        /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
         if(b<0 || t<0) { throw new IllegalArgumentException("Una delle coordinate è negativa"); }
-        this.b = b;
-        this.t = t;
-    }
+        this.b = b; this.t = t; }
 
     /**
      * Get per recuperare b e T.
      * @return b e t su richiesta
      */
-    public int getB(){ return b; }
-    public int getT(){ return t; }
+    public int getB() { return b; }
+    public int getT() { return t; }
 
     /** Questa posizione è uguale a x se e solo se x è della classe {@link Pos}
      * ed ha le stesse coordinate.
@@ -37,16 +34,11 @@ public class Pos {
      * @return true se x è uguale a questa posizione */
     @Override
     public boolean equals(Object x) {
-        /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
-        if(x instanceof Pos && ((Pos) x).getB() == b && ((Pos) x).getT() == t){ return true; }
-        return false;
-    }
+        if(x instanceof Pos && ((Pos) x).getB() == b && ((Pos) x).getT() == t) { return true; } return false; }
 
     /** Ridefinito coerentemente con la ridefinizione di {@link Pos#equals(Object)}.
      * @return l'hash code di questa posizione */
     @Override
-    public int hashCode() { //Tentativo di risoluzione!! compongo le coordinate e le uso come hascode
-        /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
-        return Objects.hash(b, t);
-    }
+    public int hashCode() { return Objects.hash(b, t); }
+
 }

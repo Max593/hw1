@@ -112,12 +112,9 @@ public interface GameRuler<P> {
      * @throws NullPointerException se m è null
      * @throws IllegalStateException se il gioco è terminato */
     default boolean isValid(Move<P> m) {
-        /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
         if(m == null) { throw new NullPointerException("La mossa non può essere null"); }
         if(turn() == 0) { throw new IllegalStateException("Il gioco è terminato"); }
-        if(validMoves().contains(m)) { return true; }
-        return false;
-    }
+        if(validMoves().contains(m)) { return true; } return false; }
 
     /** Ritorna l'insieme delle mosse valide relative alla posizione p. Se nella
      * posizione p c'è un (modello di) pezzo, ritorna tutte le mosse valide che
@@ -135,34 +132,25 @@ public interface GameRuler<P> {
      * @throws IllegalArgumentException se p non è una posizione della board
      * @throws IllegalStateException se il gioco è terminato */
     default Set<Move<P>> validMoves(Pos p) {
-        /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
         if(p == null) { throw new NullPointerException("La posizione non può essere null"); }
         if(!getBoard().isPos(p)) { throw new IllegalArgumentException("Il pezzo non si trova nella Board"); }
         if(turn() == 0) { throw new IllegalStateException("Il gioco è ormai terminato"); }
         Set<Move<P>> ris = new HashSet<>(); //Insieme del risultato
-
         if(getBoard().get(p) != null) { //Se la posizione della board contiene un pezzo
             for(Move i : validMoves()) {
                 if(i.getKind().equals(Move.Kind.ACTION)) { //Solo se la mossa è di tipo Action
                     Action a = ((Action) i.getActions().get(0));
                     if((a.getKind().equals(Action.Kind.MOVE) || a.getKind().equals(Action.Kind.JUMP) ||
                             a.getKind().equals(Action.Kind.SWAP)) && a.getPiece().equals(getBoard().get(p)))
-                    { ris.add(i); }
-                }
-            }
-        }
+                    { ris.add(i); } } } }
         if(getBoard().get(p) == null) { //Se la posizione della board NON contiene un pezzo
             for(Move i : validMoves()) {
                 if(i.getKind().equals(Move.Kind.ACTION)) { //Solo se la mossa è di tipo Action
                     Action a = ((Action) i.getActions().get(0));
                     if(a.getKind().equals(Action.Kind.ADD) &&
                             a.getPos().equals(Collections.singletonList(p)))
-                    { ris.add(i); }
-                }
-            }
-        }
-        return Collections.unmodifiableSet(ris);
-    }
+                    { ris.add(i); } } } }
+        return Collections.unmodifiableSet(ris); }
 
     /** Ritorna il punteggio attuale del giocatore con indice di turnazione i.
      * Questo metodo è implementato solamente se il gioco prevede dei punteggi come

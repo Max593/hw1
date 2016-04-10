@@ -79,11 +79,8 @@ public interface Board<P> {
      * @return true se p è una posizione della board
      * @throws NullPointerException se p è null */
     default boolean isPos(Pos p) {
-        /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
         if(p == null) { throw new NullPointerException("La posizione è null"); }
-        if(positions().contains(p)) { return true; }
-        return false;
-    }
+        if(positions().contains(p)) { return true; } return false; }
 
     /** Ritorna il (modello di) pezzo nella posizione p della board o null se la
      * posizione è vuota o non è una posizione della board.
@@ -97,11 +94,8 @@ public interface Board<P> {
      * {@link Board#get(Pos)}.
      * @return l'insieme delle posizioni occupate da pezzi, non ritorna mai null */
     default Set<Pos> get() {
-        /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
         Set<Pos> ris = new HashSet<>();
-        for(Pos i : positions()){
-            if(get(i) != null) { ris.add(i); }
-        }
+        for(Pos i : positions()){ if(get(i) != null) { ris.add(i); } }
         return Collections.unmodifiableSet(ris);
     }
 
@@ -114,11 +108,8 @@ public interface Board<P> {
      * @throws NullPointerException se pm è null */
     default Set<Pos> get(P pm) {
         if(pm == null) { throw new NullPointerException("Non si può dare null in input"); }
-        /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
         Set<Pos> ris = new HashSet<>();
-        for(Pos i : positions()){
-            if(get(i) == pm) { ris.add(i); }
-        }
+        for(Pos i : positions()){ if(get(i) == pm) { ris.add(i); } }
         return Collections.unmodifiableSet(ris);
     }
 
@@ -168,15 +159,14 @@ public interface Board<P> {
      * @throws IllegalArgumentException se n <= 0 o una delle posizioni della linea
      * specificata non è nella board */
     default void put(P pm, Pos p, Dir d, int n) {
-        /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
         if(!isModifiable()) { throw new UnsupportedOperationException("Questa board è immodificabile"); }
         if(pm == null || p == null || d == null) { throw new NullPointerException("La pedina, la posizione o la direzione è null"); }
         if(n <= 0) { throw new IllegalArgumentException("Il numero di posizioni da percorrere è <= 0"); }
         Pos temp = p; //Posizione di origine.
         for(int i = 0; i < n; i++) {
             temp = adjacent(temp, d);
-            if(temp == null) { throw new IllegalArgumentException("La posizione non è nella Board"); }
-        }
+            if(temp == null) { throw new IllegalArgumentException("La posizione non è nella Board"); } }
         put(pm, temp);
     }
+
 }

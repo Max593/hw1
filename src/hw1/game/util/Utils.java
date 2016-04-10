@@ -21,11 +21,8 @@ public class Utils {
      * @return una view immodificabile della board b
      * @throws NullPointerException se b è null */
     public static <P> Board<P> UnmodifiableBoard(Board<P> b) {
-        /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
         if(b == null) { throw new NullPointerException("La Board di input non può essere null"); }
-
-        return new BoardView<>(b);
-    }
+        return new BoardView<>(b); }
 
     /** Imposta i nomi dei giocatori pp nella GameFactory gf poi ottiene il
      * GameRuler dalla gf, passa a ogni giocatore una copia del GameRuler e gioca
@@ -41,7 +38,6 @@ public class Utils {
      * compatibile con quello richiesto dalla GameFactory gf */
     @SafeVarargs
     public static <P> GameRuler<P> play(GameFactory<? extends GameRuler<P>> gf, Player<P>...pp) {
-        /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
         if(gf == null || pp == null) { throw new NullPointerException("La GameFactory o la lista dei giocatori è null"); }
 
         String[] names = new String[0];
@@ -49,12 +45,10 @@ public class Utils {
             names = Arrays.copyOf(names, names.length+1);
             names[names.length-1] = i.name(); }
         gf.setPlayerNames(names);
-
         GameRuler<P> gR = gf.newGame().copy();
         for(Player i : pp) { i.setGame(gR); }
-        while(gR.result() == -1) { gR.move(pp[gR.turn()-1].getMove()); } //Esegue il gioco
-        return gR;
-    }
+        while(gR.result() == -1) { gR.move(pp[gR.turn()-1].getMove()); } //Esecuzione del gioco
+        return gR; }
 
     /** Ritorna un oggetto funzione che per ogni oggetto di tipo {@link PieceModel}
      * produce una stringa corta che lo rappresenta. Specificatamente la stringa

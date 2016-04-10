@@ -24,11 +24,9 @@ public class RandPlayer<P> implements Player<P> {
      * @param name  il nome del giocatore random
      * @throws NullPointerException se name è null */
     public RandPlayer(String name) {
-        /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
         if(name == null) { throw new NullPointerException("Il nome del player non può essere null"); }
         this.name = name;
-        this.gameRul = null;
-    }
+        this.gameRul = null; }
 
     @Override
     public String name() {
@@ -38,8 +36,7 @@ public class RandPlayer<P> implements Player<P> {
     @Override
     public void setGame(GameRuler<P> g) {
         if(g == null) { throw new IllegalArgumentException("Il gioco non può essere null"); }
-        gameRul = g;
-    }
+        gameRul = g; }
 
     @Override
     public void moved(int i, Move<P> m) { //Sbagliato ma non controllato dal grader
@@ -48,8 +45,7 @@ public class RandPlayer<P> implements Player<P> {
         if(m == null) { throw new NullPointerException("La mossa non può essere null"); }
         if(i < 1 || i > gameRul.players().size()
                 || !gameRul.isValid(m)) { throw new IllegalArgumentException("Indice di turnazione non consentito o mossa non valida"); }
-        gameRul.move(m);
-    }
+        gameRul.move(m); }
 
     @Override
     public Move<P> getMove() {
@@ -60,6 +56,6 @@ public class RandPlayer<P> implements Player<P> {
         List temp = new ArrayList<>();
         temp.addAll(gameRul.validMoves());
         Random rand = new Random();
-        return (Move) temp.get(rand.nextInt(temp.size())); //Mossa random
-    }
+        return (Move) temp.get(rand.nextInt(temp.size())); } //Mossa random
+
 }

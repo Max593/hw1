@@ -25,17 +25,14 @@ public class PieceModel<S extends Enum<S>> {
      * @param c  il colore
      * @throws NullPointerException se s o c è null */
     public PieceModel(S s, String c) {
-        /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
         if(s == null || c == null) { throw new NullPointerException("Specie o colore non può essere null"); }
-        this.species = s;
-        this.color = c;
-    }
+        this.species = s; this.color = c; }
 
     /**
      * Get di species e color.
      * @return species e color
      */
-    public S getSpecies(){ return species; }
+    public S getSpecies() { return species; }
     public String getColor() { return color; }
 
     /** Ritorna true se e solo se x è un oggetto di tipo compatibile con
@@ -45,17 +42,12 @@ public class PieceModel<S extends Enum<S>> {
      * @return true x se è uguale a questo modello di pezzo */
     @Override
     public boolean equals(Object x) {
-        /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
-        if(x instanceof PieceModel && ((PieceModel) x).getColor() == color && ((PieceModel) x).getSpecies() == species) { return true; }
-        return false;
-    }
+        if(x instanceof PieceModel && ((PieceModel) x).getColor() == color && ((PieceModel) x).getSpecies() == species) { return true; } return false; }
 
     /** Ridefinito coerentemente con la ridefinizione di
      * {@link PieceModel#equals(Object)}.
      * @return hash code di questo modello di pezzo */
     @Override
-    public int hashCode() {
-        /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
-        return Objects.hash(species, color);
-    }
+    public int hashCode() { return Objects.hash(species, color); }
+
 }
