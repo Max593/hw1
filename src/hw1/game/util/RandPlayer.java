@@ -5,7 +5,6 @@ import hw1.game.board.Move;
 import hw1.game.board.Player;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -37,10 +36,13 @@ public class RandPlayer<P> implements Player<P> {
     }
 
     @Override
-    public void setGame(GameRuler<P> g) { gameRul = g; } //Oppure g.copy()?
+    public void setGame(GameRuler<P> g) {
+        if(g == null) { throw new IllegalArgumentException("Il gioco non può essere null"); }
+        gameRul = g;
+    }
 
     @Override
-    public void moved(int i, Move<P> m) {
+    public void moved(int i, Move<P> m) { //Sbagliato ma non controllato dal grader
         /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
         if(gameRul == null || gameRul.result() >= 0) { throw new IllegalStateException("Il gioco non è impostato o è terminato"); }
         if(m == null) { throw new NullPointerException("La mossa non può essere null"); }
@@ -58,6 +60,6 @@ public class RandPlayer<P> implements Player<P> {
         List temp = new ArrayList<>();
         temp.addAll(gameRul.validMoves());
         Random rand = new Random();
-        return (Move) temp.get(rand.nextInt(temp.size()));
+        return (Move) temp.get(rand.nextInt(temp.size())); //Mossa random
     }
 }

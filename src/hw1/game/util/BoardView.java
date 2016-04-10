@@ -11,15 +11,16 @@ import java.util.List;
 public class BoardView<P> implements Board<P> {
     private Board<P> boardOrig;
 
-    public BoardView(Board<P> b) {
-        this.boardOrig = b;
-    }
+    public BoardView(Board<P> b) { this.boardOrig = b; } //Costruttore
 
     @Override
     public boolean isModifiable(){ return false; }
 
     @Override
     public P put(P pm, Pos p) { throw new UnsupportedOperationException("La view non è modificabile"); }
+
+    @Override
+    public void put(P pm, Pos p, Dir d, int n) { throw new UnsupportedOperationException("La view non è modificabile"); }
 
     @Override
     public P remove(Pos p) { throw new UnsupportedOperationException("La view non è modificabile"); }

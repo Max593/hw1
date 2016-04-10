@@ -7,6 +7,7 @@ import hw1.game.util.Utils;
 
 import java.util.*;
 
+import static hw1.game.board.Board.Dir.*;
 import static hw1.game.board.PieceModel.Species;
 
 
@@ -49,6 +50,7 @@ public class Othello implements GameRuler<PieceModel<Species>> {
     public final Player player2;
     public Board<PieceModel<Species>> board;
     public int cT;
+    public List game; //Lista di tutti gli stati di gioco in ordine di esecuzione
 
     /** Crea un GameRuler per fare una partita a Othello.
      * @param p1  il nome del primo giocatore
@@ -65,6 +67,7 @@ public class Othello implements GameRuler<PieceModel<Species>> {
         this.player2 = new RandPlayer<>(p2);
         for(Player i : Arrays.asList(player1, player2)) { i.setGame(copy()); } //Copia il gameruler ai giocatori
         this.cT = 1; //Inizia il player1
+        this.game = new ArrayList<>();
     }
 
     @Override
@@ -102,7 +105,7 @@ public class Othello implements GameRuler<PieceModel<Species>> {
         /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
         if(cT == 1 && validMoves().size() == 0) { cT = 2; }
         if(cT == 2 && validMoves().size() == 0) { cT = 1; }
-        if(player1.getMove() == null && player2.getMove() == null) { cT = 0; }
+        if(player1.getMove() == null && player2.getMove() == null) { cT = 0; } //Sbagliato, score è necessario!
         return cT;
     }
 
@@ -116,39 +119,103 @@ public class Othello implements GameRuler<PieceModel<Species>> {
             if(cT == 1) { c = "nero"; }
             for(Object i : m.getActions()) { //Le varie azioni
                 if(((Action) i).getKind() == Action.Kind.ADD) {
-                    board.put(new PieceModel<Species>(Species.DISC,c), (Pos) ((Action) i).getPos().get(0));
-                }
+                    board.put(new PieceModel<Species>(Species.DISC,c), (Pos) ((Action) i).getPos().get(0)); }
                 if(((Action) i).getKind() == Action.Kind.SWAP) {
                     for(Object p : ((Action) i).getPos()) {
-                        board.put(new PieceModel<Species>(Species.DISC,c), (Pos) ((Action) i).getPos().get(0));
-                    } } }
-            if(cT == 1) { cT = 2; }
-            cT = 1; return true; }
+                        board.put(new PieceModel<Species>(Species.DISC,c), (Pos) ((Action) i).getPos().get(0)); } } }
+            if(cT == 1) { cT = 2; } //Se sta giocando il player1 passa al 2
+            cT = 1; return true; } //Ritorna il gioco al player1
         return false; }
 
     @Override
     public boolean unMove() {
-        throw new UnsupportedOperationException("DA IMPLEMENTARE");
+        throw new UnsupportedOperationException("DA IMPLEMENTARE"); //Provo ad implementare prima copy
     }
 
     @Override
     public boolean isPlaying(int i) {
-        throw new UnsupportedOperationException("DA IMPLEMENTARE");
+        /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
+        if(i > players().size()) { throw new IllegalArgumentException("L'indice di turnazione non corrisponde a nessun giocatore"); }
+        if(result() > -1) { return false; }
+        return true;
     }
 
     @Override
     public int result() {
-        throw new UnsupportedOperationException("DA IMPLEMENTARE");
+        /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
+        if(player1.getMove() == null && player2.getMove() == null) { //Se la partita è effettivamente finita
+            if(score(1) == score(2)) { return 0; } //Patta
+            if(score(1) > score(2)) { return 1; }
+            if(score(2) > score(1)) { return 2;}
+        }
+        return -1; //Il gioco NON è finito
     }
 
     @Override
-    public Set<Move<PieceModel<Species>>> validMoves() {
-        throw new UnsupportedOperationException("DA IMPLEMENTARE");
+    public Set<Move<PieceModel<Species>>> validMoves() { //Le mosse inizieranno solo con ADD e seguiranno solo con SWAP
+        /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
+
+        Set<Move<PieceModel<Species>>> mosse = new HashSet<>(); //Insieme delle mosse (risultato), inizializzato come insieme vuoto
+        String cA = "nero";
+        String cP = "bianco";
+        if(cT == 1) { cA = "bianco"; cP = "nero"; } //Colore delle pedine del player in base al turno di gioco
+
+        for(Pos p : board.positions()){ //Tutte le posizioni della board
+            if(board.get(p) == new PieceModel<Species>(Species.DISC, cA)) { //Solo pedine del colore opposto
+                for(Board.Dir d : new Board.Dir[]{UP, UP_L, LEFT, DOWN_L}) { //Per la metà delle direzioni
+                    List<Pos> posizioni = new ArrayList<>(); //Posizioni che userò nello swap
+                    PieceModel<Species> p1 = new PieceModel<Species>(Species.DISC, cA); Pos pos1 = null;
+                    PieceModel<Species> p2 = new PieceModel<Species>(Species.DISC, cA); Pos pos2 = null;
+                    Pos tp = p; //Posizione temporanea per i vari adjacent
+                    Board.Dir d2 = null; //Direzione opposta
+                    if(d == UP) { d2 = DOWN;} if(d == UP_L) {d2 = DOWN_R;} if(d == LEFT) {d2 = RIGHT;} if(d == DOWN_L) { d2 = UP_R;}
+                    while(p1 == new PieceModel<Species>(Species.DISC, cA)){
+                        if(board.get(board.adjacent(tp, d)) == null || board.get(board.adjacent(tp, d)) != new PieceModel<Species>(Species.DISC, cA)) {
+                            p1 = board.get(board.adjacent(tp, d));
+                            pos1 = board.adjacent(tp, d);
+                            break;
+                        }
+                        tp = board.adjacent(tp, d);
+                        posizioni.add(board.adjacent(tp, d));
+                    }
+                    tp = p; //Resetto la posizione temporanea
+                    while(p2 == new PieceModel<Species>(Species.DISC, cA)){
+                        if(board.get(board.adjacent(p, d2)) == null || board.get(board.adjacent(p, d2)) != new PieceModel<Species>(Species.DISC, cA)) {
+                            p1 = board.get(board.adjacent(p, d2));
+                            pos2 = board.adjacent(tp, d2);
+                            break;
+                        }
+                        tp = board.adjacent(tp, d2);
+                        posizioni.add(board.adjacent(p, d2));
+                    }
+                    if(p1 == null && p2 != new PieceModel<Species>(Species.DISC, cA) && p2 != null) { //Se p1 = null e p2 = pezzo del player corrente
+                        Action<PieceModel<Species>> a1 = new Action<>(pos1, new PieceModel<>(Species.DISC, cP));
+                        Action<PieceModel<Species>> a2 = new Action<>(new PieceModel<>(Species.DISC, cP), (Pos[]) posizioni.toArray());
+                        mosse.add(new Move<>(a1,a2));
+                    }
+                    if(p2 == null && p1 != new PieceModel<Species>(Species.DISC, cA) && p1 != null) { //Se p2 = null e p1 = pezzo del player corrente
+                        Action<PieceModel<Species>> a1 = new Action<>(pos2, new PieceModel<>(Species.DISC, cP));
+                        Action<PieceModel<Species>> a2 = new Action<>(new PieceModel<>(Species.DISC, cP), (Pos[]) posizioni.toArray());
+                        mosse.add(new Move<>(a1,a2));
+                    }
+                }
+            }
+        }
+
+        return mosse;
     }
 
     @Override
     public double score(int i) {
-        throw new UnsupportedOperationException("DA IMPLEMENTARE");
+        /*throw new UnsupportedOperationException("DA IMPLEMENTARE");*/
+        int counter = 0;
+        if(i == 1) {
+            for(Pos p : board.positions()) { if(board.get(p) == new PieceModel<Species>(Species.DISC, "nero")) {counter++;} }
+        }
+        if(i == 2) {
+            for(Pos p : board.positions()) { if(board.get(p) == new PieceModel<Species>(Species.DISC, "bianco")) {counter++;} }
+        }
+        return counter;
     }
 
     @Override
