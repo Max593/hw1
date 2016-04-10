@@ -45,7 +45,7 @@ import static hw1.game.board.PieceModel.Species;
  * assegna la vittoria a chi ne ha il maggior numero. Per ulteriori informazioni si
  * può consultare
  * <a href="https://it.wikipedia.org/wiki/Othello_(gioco)">Othello</a> */
-public class Othello implements GameRuler<PieceModel<Species>> {
+public class Othello implements GameRuler<PieceModel<Species>> { //Non terminato
     public final Player player1;
     public final Player player2;
     public Board<PieceModel<Species>> board;
